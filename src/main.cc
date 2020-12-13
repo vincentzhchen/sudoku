@@ -61,14 +61,11 @@ int main() {
     if (kp.is_delete()) g.delete_digit(active_c, active_r);
 
     int num = kp.get_digit();
-    if ((num != 0) && (g.color_overlay()[active_r][active_c] == 35)) {
-      char digits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
-      g.matrix()[active_r][active_c] = digits[num];
-    }
+    g.insert_digit(num, active_c, active_r);
 
+    // show grid here
     display::display_all(g);
-
-    usleep(200000);
+    usleep(200000);  // add some delay to slow down the loop
   }
   return 0;
 }
