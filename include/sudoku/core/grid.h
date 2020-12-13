@@ -16,19 +16,22 @@
 
 #pragma once
 
+#include <sudoku/constants/color.h>
+
 #include <vector>
 
 class Grid {
  public:
   Grid();
-  std::vector<std::vector<char>> matrix;
-  std::vector<std::vector<char>> puzzle;
-  std::vector<std::vector<int>> color_overlay;
+  std::vector<std::vector<char>> &matrix();
+  std::vector<std::vector<char>> &puzzle();
+  std::vector<std::vector<int>> &color_overlay();
   const int height();
   const int width();
   int highlight_x();
   int highlight_y();
   void highlight(int x, int y);
+  void insert_digit(int digit, int x, int y);
   void delete_digit(int x, int y);
 
  private:
@@ -39,6 +42,19 @@ class Grid {
   // always have cursor on first number
   int _highlight_x = 2;
   int _highlight_y = 1;
+
+  // color scheme
+  const int _base_color = color::BLACK;
+  const int _border_color = color::BLUE;
+  const int _missing_val_color = color::MAGENTA;
+  const int _given_val_color = color::WHITE;
+
+  // lookup
+  char _digits[10] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+
+  std::vector<std::vector<char>> _matrix;
+  std::vector<std::vector<char>> _puzzle;
+  std::vector<std::vector<int>> _color_overlay;
 
   void setup_frame();
   void setup_color();

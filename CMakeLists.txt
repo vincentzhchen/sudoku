@@ -10,6 +10,7 @@ set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 add_executable(sudoku
     ../src/main.cc
     ../src/sudoku/core/grid.cc
+    ../src/sudoku/util/display.cc
     ../src/util/kb_io.cc
     ../src/util/user_input.cc)
 
