@@ -24,8 +24,8 @@ namespace puzzle_generator {
 class Solver {
  public:
   explicit Solver(std::vector<std::vector<int>> grid);
-  std::vector<std::vector<int>> generate_solution(
-      bool use_random_guess = false);
+  void execute(bool use_random_guess = false);
+  std::vector<std::vector<int>> solution();
   int num_solutions();
 
  private:
@@ -38,14 +38,16 @@ class Solver {
 
 class Puzzle {
  public:
-  Puzzle();
-  void generate_puzzle();
+  explicit Puzzle(int difficulty = 5);
   std::vector<std::vector<int>> puzzle();
   std::vector<std::vector<int>> solution();
 
  private:
-  std::vector<std::vector<int>> generate_valid_filled_grid();
+  void generate_puzzle();
+  void generate_valid_filled_grid();
+  void remove_values();
 
+  int _difficulty = 5;
   std::vector<std::vector<int>> _puzzle;
   std::vector<std::vector<int>> _solution;
 };
