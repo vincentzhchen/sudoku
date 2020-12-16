@@ -25,53 +25,63 @@ namespace puzzle_generator {
 Solver::Solver(std::vector<std::vector<int>> grid) { _grid = grid; }
 
 std::vector<std::vector<int>> Solver::generate_solution(bool use_random_guess) {
-  backtrack_solver(use_random_guess = use_random_guess);
+  backtrack_solver(use_random_guess);
   return _soln;
 }
 
-void Solver::backtrack_solver(int curr_row, int curr_col,
-                              bool use_random_guess) {
-  std::tuple<int, int> unfilled = find_unfilled(_grid, curr_row);
-  int unfilled_row = std::get<0>(unfilled);
-  int unfilled_col = std::get<1>(unfilled);
-
-  if (unfilled_row == -1) {
-    _soln = _grid;
-    return;
-  }
-
-  std::vector<int> num{1, 2, 3, 4, 5, 6, 7, 8, 9};
-  if (use_random_guess) {
-    std::srand(std::time(0));  // use current time as seed for random generator
-    std::random_shuffle(num.begin(), num.end());
-  }
-
-  for (int i = 0; i < 9; i++) {
-    if (puzzle_checker::is_valid(_grid, unfilled_row, unfilled_col, num[i])) {
-      _grid[unfilled_row][unfilled_col] = num[i];  // make a change
-      backtrack_solver(unfilled_row, unfilled_col,
-                       use_random_guess);     // recurse
-      _grid[unfilled_row][unfilled_col] = 0;  // undo change
-    }
-  }
-}
-
 /**
- * Starting from current row, find next unfilled cell.
+ * Solver that solves using backtracking.
  */
-std::tuple<int, int> Solver::find_unfilled(
-    const std::vector<std::vector<int>> &grid, int curr_row) {
-  for (int row = curr_row; row < 9; row++)
-    for (int col = 0; col < 9; col++)
-      if (grid[row][col] == 0) return std::make_tuple(row, col);
-  return std::make_tuple(-1, -1);
+int Solver::backtrack_solver(bool use_random_guess) {
+  // the grid is not unique if there is already more than 1 solution
+  // so return at this point, no need to find the rest
+  if (_num_soln > 1) {
+    return _num_soln;
+  }
+
+  int row, col;
+  for (int i = 0; i < 81; i++) {
+    row = i / 9;
+    col = i % 9;
+    if (_grid[row][col] == 0) {
+      std::vector<int> num{1, 2, 3, 4, 5, 6, 7, 8, 9};
+      if (use_random_guess) {
+        // use current time as seed for random generator
+        std::srand(std::time(0));
+        std::random_shuffle(num.begin(), num.end());
+      }
+      for (int i = 0; i < 9; i++) {
+        if (puzzle_checker::is_valid(_grid, row, col, num[i])) {
+          _grid[row][col] = num[i];        // make change
+          int count = backtrack_solver();  // recurse
+          if (count > _num_soln) {
+            _num_soln = count;
+            _soln = _grid;        // store solution
+            _grid[row][col] = 0;  // backtrack even when solved for new paths
+          } else {
+            _grid[row][col] = 0;  // backtrack
+          }
+        }
+      }  // end loop to try out each digit
+      return _num_soln;
+    }  // end if (_grid[row][col] == 0)
+  }
+  return _num_soln + 1;  // add a solution if whole backtrack was successful
 }
+
+int Solver::num_solutions() { return _num_soln; }
 
 Puzzle::Puzzle() { generate_puzzle(); }
 
 std::vector<std::vector<int>> Puzzle::puzzle() { return _puzzle; }
 std::vector<std::vector<int>> Puzzle::solution() { return _solution; }
 
+/**
+ * Generate a valid filled sudoku grid by running a solver on a seed grid.
+ * The seed grid is not completely empty; the diagonal 3x3 matrices are
+ * randomly filled first because they do not affect their respective columns
+ * and rows.  The solver fills the remaining empty cells.
+ */
 std::vector<std::vector<int>> Puzzle::generate_valid_filled_grid() {
   // start with empty grid
   std::vector<std::vector<int>> g(9, {0, 0, 0, 0, 0, 0, 0, 0, 0});
@@ -98,7 +108,7 @@ std::vector<std::vector<int>> Puzzle::generate_valid_filled_grid() {
 
   // run the solver against the matrix to create a valid sudoku
   puzzle_generator::Solver s = puzzle_generator::Solver(g);
-  std::vector<std::vector<int>> grid = s.generate_solution();
+  std::vector<std::vector<int>> grid = s.generate_solution(true);
   return grid;
 }
 

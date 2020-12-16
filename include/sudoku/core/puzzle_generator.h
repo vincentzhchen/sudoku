@@ -26,15 +26,14 @@ class Solver {
   explicit Solver(std::vector<std::vector<int>> grid);
   std::vector<std::vector<int>> generate_solution(
       bool use_random_guess = false);
+  int num_solutions();
 
  private:
   std::vector<std::vector<int>> _grid;
   std::vector<std::vector<int>> _soln;
+  int _num_soln = 0;
 
-  void backtrack_solver(int curr_row = 0, int curr_col = 0,
-                        bool use_random_guess = false);
-  std::tuple<int, int> find_unfilled(const std::vector<std::vector<int>> &grid,
-                                     int curr_col);
+  int backtrack_solver(bool use_random_guess = false);
 };
 
 class Puzzle {
