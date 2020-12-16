@@ -72,6 +72,12 @@ void KeyPress::update_key_press() {
         break;
       case 'x':
         kp = keyns::Key::DELETE;
+      case 'c':
+        kp = keyns::Key::C;
+        break;
+      case 'r':
+        kp = keyns::Key::R;
+        break;
     }
   } else {
     kp = keyns::Key::NONE;
@@ -103,4 +109,13 @@ int KeyPress::get_digit() {
     return 9;
   else
     return 0;
+}
+
+char KeyPress::get_char() {
+  if (key_press == keyns::Key::C)
+    return 'c';
+  else if (key_press == keyns::Key::R)
+    return 'r';
+  else
+    return ' ';
 }

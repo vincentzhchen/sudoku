@@ -34,7 +34,9 @@ enum Key {
   SEVEN,
   EIGHT,
   NINE,
-  DELETE
+  DELETE,
+  C,
+  R
 };
 }  // namespace keyns
 
@@ -47,6 +49,7 @@ class KeyPress {
   bool is_right();
   bool is_delete();
   int get_digit();
+  char get_char();
 
  private:
   keyns::Key key_press = keyns::Key::NONE;

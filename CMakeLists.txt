@@ -11,6 +11,7 @@ add_executable(sudoku
     ../src/main.cc
     ../src/sudoku/core/grid.cc
     ../src/sudoku/core/puzzle_generator.cc
+    ../src/sudoku/util/data_conversion.cc
     ../src/sudoku/util/display.cc
     ../src/sudoku/util/puzzle_checker.cc
     ../src/util/kb_io.cc

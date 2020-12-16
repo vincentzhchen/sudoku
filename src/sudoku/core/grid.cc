@@ -15,6 +15,8 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <sudoku/core/grid.h>
+#include <sudoku/core/puzzle_generator.h>
+#include <sudoku/util/data_conversion.h>
 
 #include <string>
 
@@ -53,17 +55,9 @@ void Grid::setup_frame() {
 }
 
 void Grid::setup_puzzle() {
-  std::vector<std::vector<char>> p{
-      {'5', '3', '.', '.', '7', '.', '.', '.', '.'},
-      {'6', '.', '.', '1', '9', '5', '.', '.', '.'},
-      {'.', '9', '8', '.', '.', '.', '.', '6', '.'},
-      {'8', '.', '.', '.', '6', '.', '.', '.', '3'},
-      {'4', '.', '.', '8', '.', '3', '.', '.', '1'},
-      {'7', '.', '.', '.', '2', '.', '.', '.', '6'},
-      {'.', '6', '.', '.', '.', '.', '2', '8', '.'},
-      {'.', '.', '.', '4', '1', '9', '.', '.', '5'},
-      {'.', '.', '.', '.', '8', '.', '.', '7', '9'}};
-  _puzzle = p;
+  puzzle_generator::Puzzle p(5);
+  _puzzle = dtype_converter::int_to_char(p.puzzle());
+  _solution = dtype_converter::int_to_char(p.solution());
 
   for (int i = 1; i < height(); i += 2) {
     for (int j = 2; j < width(); j += 4) {
@@ -106,4 +100,21 @@ void Grid::insert_digit(int digit, int x, int y) {
 void Grid::delete_digit(int x, int y) {
   if (_color_overlay[_highlight_y][_highlight_x] == _missing_val_color)
     _matrix[y][x] = '.';
+}
+
+int Grid::check_solution(bool include_missing) {
+  int count = 0;
+
+  if (!include_missing) {
+    for (int i = 1; i < height(); i += 2)
+      for (int j = 2; j < width(); j += 4)
+        if (_matrix[i][j] != '.')
+          if (_matrix[i][j] != _solution[i / 2][j / 4]) count++;
+  } else {
+    for (int i = 1; i < height(); i += 2)
+      for (int j = 2; j < width(); j += 4)
+        if (_matrix[i][j] != _solution[i / 2][j / 4]) count++;
+  }
+
+  return count;
 }

@@ -33,6 +33,7 @@ class Grid {
   void highlight(int x, int y);
   void insert_digit(int digit, int x, int y);
   void delete_digit(int x, int y);
+  int check_solution(bool include_missing = false);
 
  private:
   // sudoku board dimension is fixed
@@ -54,6 +55,7 @@ class Grid {
 
   std::vector<std::vector<char>> _matrix;
   std::vector<std::vector<char>> _puzzle;
+  std::vector<std::vector<char>> _solution;
   std::vector<std::vector<int>> _color_overlay;
 
   void setup_frame();
