@@ -72,6 +72,7 @@ void KeyPress::update_key_press() {
         break;
       case 'x':
         kp = keyns::Key::DELETE;
+        break;
       case 'c':
         kp = keyns::Key::C;
         break;
