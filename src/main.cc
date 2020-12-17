@@ -23,8 +23,8 @@
 
 int main() {
   Grid *g = new Grid();
-  int num_wrong = -1;
-  int grid_state = -1;
+  int num_wrong = g->check_solution();
+  int grid_state = g->check_solution(true);
 
   KeyPress kp;
   while (true) {
@@ -77,13 +77,15 @@ int main() {
     // show grid here
     display::display_all(*g);
 
-    std::cout << "SOLUTION CHECK: " << num_wrong << " mistakes." << std::endl;
-
     grid_state = g->check_solution(true);
-    if (grid_state == 0)
+    if (grid_state == 0) {
+      std::cout << "SOLUTION CHECK: " << grid_state << " mistakes."
+                << std::endl;
       std::cout << "GAME STATE: COMPLETE" << std::endl;
-    else
+    } else {
+      std::cout << "SOLUTION CHECK: " << num_wrong << " mistakes." << std::endl;
       std::cout << "GAME STATE: ACTIVE" << std::endl;
+    }
 
     usleep(200000);  // add some delay to slow down the loop
   }
