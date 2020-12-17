@@ -36,7 +36,9 @@ enum Key {
   NINE,
   DELETE,
   C,
-  R
+  R,
+  N,
+  Q
 };
 }  // namespace keyns
 

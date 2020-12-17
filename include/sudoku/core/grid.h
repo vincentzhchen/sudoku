@@ -30,9 +30,12 @@ class Grid {
   const int width();
   int highlight_x();
   int highlight_y();
-  void highlight(int x, int y);
-  void insert_digit(int digit, int x, int y);
-  void delete_digit(int x, int y);
+  void move_up();
+  void move_down();
+  void move_left();
+  void move_right();
+  void insert_digit(int num);
+  void delete_digit();
   int check_solution(bool include_missing = false);
 
  private:
@@ -58,7 +61,13 @@ class Grid {
   std::vector<std::vector<char>> _solution;
   std::vector<std::vector<int>> _color_overlay;
 
+  int _init_r = 1;
+  int _init_c = 2;
+  int _active_r = 1;
+  int _active_c = 2;
+
   void setup_frame();
   void setup_color();
   void setup_puzzle();
+  void highlight();
 };

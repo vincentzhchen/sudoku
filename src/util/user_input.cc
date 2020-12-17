@@ -79,6 +79,12 @@ void KeyPress::update_key_press() {
       case 'r':
         kp = keyns::Key::R;
         break;
+      case 'n':
+        kp = keyns::Key::N;
+        break;
+      case 'q':
+        kp = keyns::Key::Q;
+        break;
     }
   } else {
     kp = keyns::Key::NONE;
@@ -117,6 +123,10 @@ char KeyPress::get_char() {
     return 'c';
   else if (key_press == keyns::Key::R)
     return 'r';
+  else if (key_press == keyns::Key::N)
+    return 'n';
+  else if (key_press == keyns::Key::Q)
+    return 'q';
   else
     return ' ';
 }

@@ -86,18 +86,50 @@ void Grid::setup_color() {
   }
 }
 
-void Grid::highlight(int x, int y) {
-  _highlight_x = x;
-  _highlight_y = y;
+void Grid::highlight() {
+  _highlight_x = _active_c;
+  _highlight_y = _active_r;
 }
 
-void Grid::insert_digit(int digit, int x, int y) {
+void Grid::move_up() {
+  if (_active_r > 1) {
+    _active_r -= 2;
+    highlight();
+  }
+}
+
+void Grid::move_down() {
+  if (_active_r < 17) {
+    _active_r += 2;
+    highlight();
+  }
+}
+
+void Grid::move_left() {
+  if (_active_c > 2) {
+    _active_c -= 4;
+    highlight();
+  }
+}
+
+void Grid::move_right() {
+  if (_active_c < 34) {
+    _active_c += 4;
+    highlight();
+  }
+}
+
+void Grid::insert_digit(int digit) {
+  int y = _active_r;
+  int x = _active_c;
   if ((digit != 0) && (_color_overlay[y][x] == _missing_val_color)) {
     _matrix[y][x] = _digits[digit];
   }
 }
 
-void Grid::delete_digit(int x, int y) {
+void Grid::delete_digit() {
+  int y = _active_r;
+  int x = _active_c;
   if (_color_overlay[_highlight_y][_highlight_x] == _missing_val_color)
     _matrix[y][x] = '.';
 }

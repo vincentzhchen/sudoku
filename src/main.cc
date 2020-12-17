@@ -23,50 +23,50 @@
 
 int main() {
   Grid g;
-  int active_r = 1;
-  int active_c = 2;
   int num_wrong = -1;
-  int grid_state;
+  int grid_state = -1;
 
   KeyPress kp;
   while (true) {
     kp.update_key_press();
 
-    if (kp.is_left()) {
-      if (active_c > 2) {
-        active_c -= 4;
-        g.highlight(active_c, active_r);
-      }
-    }
+    if (kp.is_left()) g.move_left();
+    if (kp.is_right()) g.move_right();
+    if (kp.is_down()) g.move_down();
+    if (kp.is_up()) g.move_up();
 
-    if (kp.is_right()) {
-      if (active_c < 34) {
-        active_c += 4;
-        g.highlight(active_c, active_r);
-      }
-    }
-
-    if (kp.is_down()) {
-      if (active_r < 17) {
-        active_r += 2;
-        g.highlight(active_c, active_r);
-      }
-    }
-
-    if (kp.is_up()) {
-      if (active_r > 1) {
-        active_r -= 2;
-        g.highlight(active_c, active_r);
-      }
-    }
-
-    if (kp.is_delete()) g.delete_digit(active_c, active_r);
+    if (kp.is_delete()) g.delete_digit();
 
     int num = kp.get_digit();
-    g.insert_digit(num, active_c, active_r);
+    g.insert_digit(num);
 
     char l = kp.get_char();
     if (l == 'c') num_wrong = g.check_solution();
+
+    if (l == 'n') {
+      system("clear");
+      char yn;
+      std::cout << "start new game? (Y/n): ";
+      std::cin >> yn;
+      // if ((yn == 'Y') || (yn == 'y')) {
+      //   Grid g2;
+      //   active_r = 1;
+      //   active_c = 2;
+      //   num_wrong = -1;
+      //   grid_state = -1;
+      // }
+    }
+
+    if (l == 'q') {
+      system("clear");
+      char yn;
+      std::cout << "quit game? (Y/n): ";
+      std::cin >> yn;
+      if ((yn == 'Y') || (yn == 'y')) {
+        system("clear");
+        break;
+      }
+    }
 
     // show grid here
     display::display_all(g);
