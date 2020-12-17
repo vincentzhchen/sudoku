@@ -61,8 +61,6 @@ class Grid {
   std::vector<std::vector<char>> _solution;
   std::vector<std::vector<int>> _color_overlay;
 
-  int _init_r = 1;
-  int _init_c = 2;
   int _active_r = 1;
   int _active_c = 2;
 

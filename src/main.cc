@@ -22,7 +22,7 @@
 #include <iostream>
 
 int main() {
-  Grid g;
+  Grid *g = new Grid();
   int num_wrong = -1;
   int grid_state = -1;
 
@@ -30,34 +30,40 @@ int main() {
   while (true) {
     kp.update_key_press();
 
-    if (kp.is_left()) g.move_left();
-    if (kp.is_right()) g.move_right();
-    if (kp.is_down()) g.move_down();
-    if (kp.is_up()) g.move_up();
+    if (kp.is_left())
+      g->move_left();
+    else if (kp.is_right())
+      g->move_right();
+    else if (kp.is_down())
+      g->move_down();
+    else if (kp.is_up())
+      g->move_up();
 
-    if (kp.is_delete()) g.delete_digit();
+    if (kp.is_delete()) g->delete_digit();
 
     int num = kp.get_digit();
-    g.insert_digit(num);
+    g->insert_digit(num);
 
+    // ALL OPTIONS HERE
     char l = kp.get_char();
-    if (l == 'c') num_wrong = g.check_solution();
+    if (l == 'c') {
+      // check solution to find number of wrong values
+      num_wrong = g->check_solution();
 
-    if (l == 'n') {
+    } else if (l == 'n') {
+      // start a new game?
       system("clear");
       char yn;
       std::cout << "start new game? (Y/n): ";
       std::cin >> yn;
-      // if ((yn == 'Y') || (yn == 'y')) {
-      //   Grid g2;
-      //   active_r = 1;
-      //   active_c = 2;
-      //   num_wrong = -1;
-      //   grid_state = -1;
-      // }
-    }
+      if ((yn == 'Y') || (yn == 'y')) {
+        g = new Grid();
+        num_wrong = -1;
+        grid_state = -1;
+      }
 
-    if (l == 'q') {
+    } else if (l == 'q') {
+      // quit game?
       system("clear");
       char yn;
       std::cout << "quit game? (Y/n): ";
@@ -69,11 +75,11 @@ int main() {
     }
 
     // show grid here
-    display::display_all(g);
+    display::display_all(*g);
 
     std::cout << "SOLUTION CHECK: " << num_wrong << " mistakes." << std::endl;
 
-    grid_state = g.check_solution(true);
+    grid_state = g->check_solution(true);
     if (grid_state == 0)
       std::cout << "GAME STATE: COMPLETE" << std::endl;
     else
